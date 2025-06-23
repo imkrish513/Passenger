@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroBrief - Simplify Passenger Briefings</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a clean look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            line-height: 1.6;
+        }
+        /* Custom styles for focus states */
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6; /* Blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Blue-500 with transparency */
+        }
+        .gradient-bg {
+            background: linear-gradient(to right, #60a5fa, #3b82f6); /* Blue-400 to Blue-600 */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm p-4 md:px-8 lg:px-12 flex justify-between items-center fixed w-full z-10 top-0">
+        <div class="flex items-center space-x-2">
+            <!-- Company Logo/Name -->
+            <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+            <span class="text-2xl font-bold text-gray-900">AeroBrief</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-150 ease-in-out">Home</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-150 ease-in-out">About Us</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-150 ease-in-out">How It Works</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-150 ease-in-out">Features</a>
+        </div>
+        <div>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                Pilot Login
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Form and Image -->
+    <header class="relative pt-24 pb-12 md:py-32 bg-gray-100 overflow-hidden">
+        <div class="container mx-auto px-4 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-12">
+            <!-- Left Content Area (Headline, Subtitle, Form) -->
+            <div class="lg:w-1/2 text-center lg:text-left z-10">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-4">
+                    Pilot Talk for the Non Pilots
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-lg lg:mx-0 mx-auto">
+                    Provides passengers with all the essential flight details they need, clearly and conveniently.
+                </p>
+
+                <!-- Pilot Input Form - Kept front and center -->
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 w-full lg:max-w-xl mx-auto lg:mx-0">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-5 text-center">Create Flight Briefing</h2>
+                    <form id="flightBriefingForm" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label for="departureAirport" class="block text-sm font-medium text-gray-700 mb-1">Departure Airport (ICAO)</label>
+                                <input type="text" id="departureAirport" name="departureAirport" placeholder="e.g., KORD"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                            </div>
+                            <div>
+                                <label for="destinationAirport" class="block text-sm font-medium text-gray-700 mb-1">Destination Airport (ICAO)</label>
+                                <input type="text" id="destinationAirport" name="destinationAirport" placeholder="e.g., KSAN"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label for="flightDate" class="block text-sm font-medium text-gray-700 mb-1">Date of Flight</label>
+                                <input type="date" id="flightDate" name="flightDate"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                            </div>
+                            <div>
+                                <label for="flightTime" class="block text-sm font-medium text-gray-700 mb-1">Estimated Departure Time (Local)</label>
+                                <input type="time" id="flightTime" name="flightTime"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                            </div>
+                        </div>
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 ease-in-out transform hover:scale-105">
+                                Generate Briefing Link
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Placeholder for generated link -->
+                    <div id="generatedLinkSection" class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center hidden">
+                        <p class="text-blue-800 font-semibold mb-2">Your Passenger Briefing Link:</p>
+                        <a id="briefingLink" href="#" target="_blank" class="text-blue-600 hover:underline break-all text-sm sm:text-base"></a>
+                        <button id="copyLinkButton" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+                                <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
+                            </svg>
+                            Copy Link
+                        </button>
+                        <div id="copyConfirmation" class="mt-2 text-green-600 text-sm hidden">Link copied!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Image Area -->
+            <div class="lg:w-1/2 flex justify-center items-center p-4">
+                <img src="../vecteezy_airplane-take-off-cut-out-on-transparent-background_20694169.png" alt="Abstract aviation illustration"
+                     class="w-full h-auto rounded-xl shadow-lg transform transition-transform duration-500 hover:scale-105">
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-4">What Passengers Will Know</h2>
+            <p class="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+                AeroBrief provides a comprehensive and easy-to-understand summary of vital flight information for your passengers.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: Exact Location -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 text-blue-600 mx-auto mb-4">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.727A8 8 0 016.343 7.273L17.657 16.727zm0 0L19.5 19.5m-1.843-2.773a4.001 4.001 0 00-7.381 0M2.924 10.742l5.143-5.144a1.002 1.002 0 011.414 0L15.086 10.742" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Exact Location & FBO</h3>
+                    <p class="text-gray-600">Passengers will know precisely where to go at the airport, including FBO details and parking.</p>
+                </div>
+
+                <!-- Feature 2: Required Documents -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 text-blue-600 mx-auto mb-4">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Documents & IDs</h3>
+                    <p class="text-gray-600">Clearly outlines all necessary identification and travel documents required for the flight.</p>
+                </div>
+
+                <!-- Feature 3: Baggage Guidelines -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 text-blue-600 mx-auto mb-4">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4l8 4m-8-4V7" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Baggage Allowances</h3>
+                    <p class="text-gray-600">Specific information on maximum baggage weight, size, and preferred bag types.</p>
+                </div>
+
+                <!-- Feature 4: Destination Details -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 text-blue-600 mx-auto mb-4">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.727A8 8 0 016.343 7.273L17.657 16.727zm0 0L19.5 19.5m-1.843-2.773a4.001 4.001 0 00-7.381 0M2.924 10.742l5.143-5.144a1.002 1.002 0 011.414 0L15.086 10.742" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Destination Insights</h3>
+                    <p class="text-gray-600">Details about the arrival airport, FBOs, and local considerations.</p>
+                </div>
+
+                <!-- Feature 5: Route & Flight Plan -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 text-blue-600 mx-auto mb-4">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Route & Flight Info</h3>
+                    <p class="text-gray-600">A clear overview of the planned route and estimated flight times.</p>
+                </div>
+
+                <!-- Feature 6: Expected Weather -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 text-blue-600 mx-auto mb-4">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 005-5c0-1.486-.391-2.928-1.166-4.214M21 12a9 9 0 10-2.309 8.65l3.201 3.202" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Expected Weather</h3>
+                    <p class="text-gray-600">Forecasted weather conditions for departure, en-route, and arrival.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 AeroBrief. All rights reserved. | <a href="#" class="hover:underline">Privacy Policy</a> | <a href="#" class="hover:underline">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Basic JavaScript for demonstration and future integration
+        document.getElementById('flightBriefingForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // In a real application, you would collect form data here and send it to your backend.
+            // For now, we'll simulate a generated link.
+            const pilotName = document.getElementById('pilotName').value || 'Pilot';
+            const departure = document.getElementById('departureAirport').value || 'KMIA';
+            const destination = document.getElementById('destinationAirport').value || 'KBOS';
+            const flightDate = document.getElementById('flightDate').value || '2025-07-23';
+
+            // Simulate a unique ID (in a real app, this would come from the backend database)
+            const uniqueId = 'flight_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+            // Construct a placeholder URL for the passenger briefing page
+            // Replace 'yourdomain.com' with your actual domain later
+            // The uniqueId would be used by your backend to fetch the specific flight details
+            const passengerBriefingURL = `https://yourdomain.com/briefing/${uniqueId}?pilot=${encodeURIComponent(pilotName)}&from=${encodeURIComponent(departure)}&to=${encodeURIComponent(destination)}&date=${encodeURIComponent(flightDate)}`;
+
+            const briefingLinkElement = document.getElementById('briefingLink');
+            const generatedLinkSection = document.getElementById('generatedLinkSection');
+            const copyConfirmation = document.getElementById('copyConfirmation');
+
+            briefingLinkElement.href = passengerBriefingURL;
+            briefingLinkElement.textContent = passengerBriefingURL;
+            generatedLinkSection.classList.remove('hidden'); // Show the link section
+            copyConfirmation.classList.add('hidden'); // Hide previous confirmation
+
+            // Add copy to clipboard functionality
+            document.getElementById('copyLinkButton').addEventListener('click', function() {
+                // For iframe environments, navigator.clipboard.writeText might be restricted.
+                // Using a fallback for broader compatibility.
+                const tempInput = document.createElement('textarea');
+                tempInput.value = briefingLinkElement.href;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                try {
+                    document.execCommand('copy');
+                    copyConfirmation.classList.remove('hidden'); // Show confirmation
+                    setTimeout(() => copyConfirmation.classList.add('hidden'), 2000); // Hide after 2 seconds
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    // Fallback for environments where execCommand is also restricted
+                    alert('Please manually copy the link: ' + briefingLinkElement.href);
+                } finally {
+                    document.body.removeChild(tempInput);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
