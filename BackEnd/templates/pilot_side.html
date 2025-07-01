@@ -205,53 +205,73 @@
     </footer>
 
     <script>
+        // backend/templates/pilot_input.html (update this script section)
+
         // Basic JavaScript for demonstration and future integration
         document.getElementById('flightBriefingForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
-            // In a real application, you would collect form data here and send it to your backend.
-            // For now, we'll simulate a generated link.
-            const pilotName = document.getElementById('pilotName').value || 'Pilot';
-            const departure = document.getElementById('departureAirport').value || 'KMIA';
-            const destination = document.getElementById('destinationAirport').value || 'KBOS';
-            const flightDate = document.getElementById('flightDate').value || '2025-07-23';
+            const formData = {
+                departure_icao: document.getElementById('departureAirport').value,
+                destination_icao: document.getElementById('destinationAirport').value,
+                flight_date: document.getElementById('flightDate').value,
+                flight_time: document.getElementById('flightTime').value
+                // For now, we only send initial fields.
+                // The detailed form (next step) will send the others.
+            };
 
-            // Simulate a unique ID (in a real app, this would come from the backend database)
-            const uniqueId = 'flight_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            fetch('/api/flight-briefings/initial', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.public_id) {
+                    const briefingLinkElement = document.getElementById('briefingLink');
+                    const generatedLinkSection = document.getElementById('generatedLinkSection');
+                    const copyConfirmation = document.getElementById('copyConfirmation');
 
-            // Construct a placeholder URL for the passenger briefing page
-            // Replace 'yourdomain.com' with your actual domain later
-            // The uniqueId would be used by your backend to fetch the specific flight details
-            const passengerBriefingURL = `https://yourdomain.com/briefing/${uniqueId}?pilot=${encodeURIComponent(pilotName)}&from=${encodeURIComponent(departure)}&to=${encodeURIComponent(destination)}&date=${encodeURIComponent(flightDate)}`;
+                    // Construct the URL to the detailed pilot form
+                    // In a real scenario, the backend's redirect_url would be used.
+                    // For local development, construct it manually based on Flask's route.
+                    const nextStepURL = `/pilot/briefing-details/${data.public_id}`;
 
-            const briefingLinkElement = document.getElementById('briefingLink');
-            const generatedLinkSection = document.getElementById('generatedLinkSection');
-            const copyConfirmation = document.getElementById('copyConfirmation');
+                    briefingLinkElement.href = nextStepURL;
+                    briefingLinkElement.textContent = window.location.origin + nextStepURL; // Show full URL for clarity
+                    generatedLinkSection.classList.remove('hidden'); // Show the link section
+                    copyConfirmation.classList.add('hidden'); // Hide previous confirmation
 
-            briefingLinkElement.href = passengerBriefingURL;
-            briefingLinkElement.textContent = passengerBriefingURL;
-            generatedLinkSection.classList.remove('hidden'); // Show the link section
-            copyConfirmation.classList.add('hidden'); // Hide previous confirmation
+                    // Optionally, you could automatically redirect the pilot to the detailed form here:
+                    // window.location.href = nextStepURL;
 
-            // Add copy to clipboard functionality
-            document.getElementById('copyLinkButton').addEventListener('click', function() {
-                // For iframe environments, navigator.clipboard.writeText might be restricted.
-                // Using a fallback for broader compatibility.
-                const tempInput = document.createElement('textarea');
-                tempInput.value = briefingLinkElement.href;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                try {
-                    document.execCommand('copy');
-                    copyConfirmation.classList.remove('hidden'); // Show confirmation
-                    setTimeout(() => copyConfirmation.classList.add('hidden'), 2000); // Hide after 2 seconds
-                } catch (err) {
-                    console.error('Failed to copy text: ', err);
-                    // Fallback for environments where execCommand is also restricted
-                    alert('Please manually copy the link: ' + briefingLinkElement.href);
-                } finally {
-                    document.body.removeChild(tempInput);
+                    // Copy link functionality (remains the same)
+                    document.getElementById('copyLinkButton').onclick = function() { // Re-assign handler
+                        const tempInput = document.createElement('textarea');
+                        tempInput.value = briefingLinkElement.href;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        try {
+                            document.execCommand('copy');
+                            copyConfirmation.classList.remove('hidden');
+                            setTimeout(() => copyConfirmation.classList.add('hidden'), 2000);
+                        } catch (err) {
+                            console.error('Failed to copy text: ', err);
+                            alert('Please manually copy the link: ' + briefingLinkElement.href);
+                        } finally {
+                            document.body.removeChild(tempInput);
+                        }
+                    };
+
+                } else if (data.error) {
+                    alert("Error: " + data.error);
                 }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                alert('An unexpected error occurred. Please try again.');
             });
         });
     </script>
